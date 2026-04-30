@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한강 크루즈 판매 실적 트래커</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1a3560; --navy-light: #2a4a80; --amber: #d4870f;
+      --card: #ffffff; --text: #1a2535; --muted: #6b7a99;
+      --border: rgba(26,53,96,0.15); --green: #2d8a5e; --red: #c0392b;
+      --pass-bg: #e8f5ee; --fail-bg: #fdf0ee;
+      --border-radius-md: 8px; --border-radius-lg: 12px;
+      --font-sans: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+    body { font-family: var(--font-sans); background: #f0f4f8; padding: 1rem; }
+    .app { max-width: 900px; margin: 0 auto; padding: 0 0 2rem; }
+    .header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 1.25rem 1.5rem; color: white;
+      border-radius: var(--border-radius-lg); margin-bottom: 1rem;
+    }
+    .header h1 { font-size: 17px; font-weight: 500; margin-bottom: 4px; color: white; }
+    .header .sub { font-size: 12px; color: rgba(255,255,255,0.7); }
+    .event-date {
+      display: inline-flex; align-items: center;
+      background: var(--amber); color: white; font-size: 12px; font-weight: 500;
+      padding: 3px 10px; border-radius: 20px; margin-top: 8px;
+    }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+    .metric-card {
+      background: var(--card); border: 0.5px solid var(--border);
+      border-radius: var(--border-radius-md); padding: 12px 14px;
+    }
+    .metric-card .label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .metric-card .value { font-size: 22px; font-weight: 500; }
+    .value.amber { color: var(--amber); }
+    .value.navy { color: var(--navy); }
+    .value.green { color: var(--green); }
+    .section-title {
+      font-size: 13px; font-weight: 500; color: var(--navy);
+      margin: 0 0 8px; border-left: 3px solid var(--amber); padding-left: 8px;
+    }
+    .rule-box {
+      background: #fff8ea; border: 0.5px solid #f5d580;
+      border-radius: var(--border-radius-md); padding: 10px 14px;
+      margin-bottom: 1rem; font-size: 12px; color: #7a5700;
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .rule-item { display: flex; align-items: center; gap: 5px; }
+    .rule-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+    .table-wrap {
+      background: var(--card); border: 0.5px solid var(--border);
+      border-radius: var(--border-radius-lg); overflow: hidden; margin-bottom: 1rem;
+    }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead { background: var(--navy); color: white; }
+    thead th { padding: 8px 4px; font-weight: 500; font-size: 11px; text-align: center; white-space: nowrap; }
+    thead th:first-child { text-align: left; padding-left: 12px; min-width: 70px; }
+    tbody tr { border-bottom: 0.5px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f5f8ff; }
+    td { padding: 5px 4px; text-align: center; color: var(--text); }
+    td:first-child { text-align: left; padding-left: 12px; font-weight: 500; font-size: 12px; white-space: nowrap; }
+    .cell-input {
+      width: 38px; height: 28px; text-align: center;
+      border: 0.5px solid var(--border); border-radius: 4px;
+      font-size: 13px; background: transparent; color: var(--text); padding: 0;
+    }
+    .cell-input:focus { outline: none; border-color: var(--navy-light); background: #f0f4ff; }
+    .total-cell { font-weight: 500; color: var(--navy); font-size: 13px; }
+    .status-badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 7px; border-radius: 12px; font-size: 10px; font-weight: 500; white-space: nowrap;
+    }
+    .badge-pass { background: var(--pass-bg); color: var(--green); }
+    .badge-fail { background: var(--fail-bg); color: var(--red); }
+    .badge-almost { background: #fff3e0; color: #e67e22; }
+    .weekend-col { background: rgba(26,53,96,0.04); }
+    .col-highlight { background: rgba(213,135,15,0.08); }
+    .progress-section { margin-bottom: 1rem; }
+    .person-progress { margin-bottom: 10px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .progress-name { font-size: 13px; font-weight: 500; color: var(--text); }
+    .progress-count { font-size: 12px; color: var(--muted); }
+    .progress-bar-wrap { height: 8px; background: #e8ecf5; border-radius: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 8px; transition: width 0.3s; }
+    .bar-pass { background: var(--green); }
+    .bar-almost { background: #f39c12; }
+    .bar-fail { background: #c0392b; }
+    .add-row {
+      display: flex; gap: 8px; padding: 10px 14px;
+      border-top: 0.5px solid var(--border); background: #fafbff;
+    }
+    .add-row input[type=text] {
+      flex: 1; height: 32px; padding: 0 10px;
+      border: 0.5px solid var(--border); border-radius: 6px;
+      font-size: 12px; color: var(--text); background: white;
+    }
+    .btn-add {
+      height: 32px; padding: 0 14px; background: var(--navy);
+      color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;
+    }
+    .btn-add:hover { background: var(--navy-light); }
+    .footer-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="event-date">승선일: 5월 28일(목) 6시</div>
+    <h1 style="margin-top:8px;">서울남동총국 "우수코디 30인" 한강 크루즈 초대</h1>
+    <div class="sub">기간: 4/29(수) ~ 5/15(금) &nbsp;|&nbsp; 신규 환산 12건 이상 선착순 30명</div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric-card"><div class="label">목표 달성자</div><div class="value green" id="m-pass">0</div></div>
+    <div class="metric-card"><div class="label">전체 참여자</div><div class="value navy" id="m-total">8</div></div>
+    <div class="metric-card"><div class="label">잔여 선착순</div><div class="value amber" id="m-remain">30</div></div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-item"><div class="rule-dot"></div>테라솔 U.P / 에어컨: <b style="margin-left:3px">2건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>안마의자: <b style="margin-left:3px">2건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>침대: <b style="margin-left:3px">1.5건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>목표: <b style="margin-left:3px">12건 이상</b></div>
+  </div>
+
+  <div class="section-title">일별 판매 실적 입력</div>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table id="main-table">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>4/29<br>수</th><th>4/30<br>목</th><th class="col-highlight">5/1<br>금</th>
+            <th>5/6<br>수</th><th>5/7<br>목</th><th class="weekend-col">5/8<br>금</th>
+            <th class="weekend-col">5/9<br>토</th><th class="weekend-col">5/10<br>일</th>
+            <th>5/11<br>월</th><th>5/12<br>화</th><th>5/13<br>수</th>
+            <th>5/14<br>목</th><th>5/15<br>금</th>
+            <th>합계</th><th>상태</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="add-row">
+      <input type="text" id="new-name" placeholder="이름 입력 후 추가" onkeydown="if(event.key==='Enter')addPerson()">
+      <button class="btn-add" onclick="addPerson()">+ 추가</button>
+    </div>
+  </div>
+
+  <div class="section-title">목표 달성 현황</div>
+  <div class="progress-section" id="progress-section"></div>
+  <div class="footer-note">셀에 환산 건수를 직접 입력하세요 (예: 1, 2, 1.5) — Enter 또는 Tab으로 이동</div>
+</div>
+
+<script>
+const GOAL = 12;
+const COL_COUNT = 13;
+const WEEKEND_IDX = [5,6,7];
+const HIGHLIGHT_IDX = [2];
+
+let people = [
+  { name: '우영미', vals: Array(COL_COUNT).fill('') },
+  { name: '박행신', vals: Array(COL_COUNT).fill('') },
+  { name: '김태호', vals: Array(COL_COUNT).fill('') },
+  { name: '전숙경', vals: Array(COL_COUNT).fill('') },
+  { name: '박일녀', vals: Array(COL_COUNT).fill('') },
+  { name: '강승임', vals: Array(COL_COUNT).fill('') },
+  { name: '임병순', vals: ['1',...Array(COL_COUNT-1).fill('')] },
+  { name: '이은이', vals: Array(COL_COUNT).fill('') },
+];
+
+function getTotal(vals) {
+  return Math.round(vals.reduce((a,b) => a + (parseFloat(b)||0), 0) * 10) / 10;
+}
+function getStatus(total) {
+  if (total >= GOAL) return '<span class="status-badge badge-pass">✓ 달성</span>';
+  if (total >= 8) return '<span class="status-badge badge-almost">진행중</span>';
+  return '<span class="status-badge badge-fail">미달</span>';
+}
+function updateMetrics() {
+  const passed = people.filter(p => getTotal(p.vals) >= GOAL).length;
+  document.getElementById('m-pass').textContent = passed;
+  document.getElementById('m-total').textContent = people.length;
+  document.getElementById('m-remain').textContent = Math.max(0, 30 - passed);
+}
+function renderProgress() {
+  document.getElementById('progress-section').innerHTML = people.map(p => {
+    const total = getTotal(p.vals);
+    const pct = Math.min(100, Math.round((total/GOAL)*100));
+    const barClass = total >= GOAL ? 'bar-pass' : (total >= 8 ? 'bar-almost' : 'bar-fail');
+    const needText = total >= GOAL ? '목표 달성!' : `${Math.round((GOAL-total)*10)/10}건 더 필요`;
+    const needColor = total >= GOAL ? 'var(--green)' : 'var(--amber)';
+    return `<div class="person-progress">
+      <div class="progress-header">
+        <span class="progress-name">${p.name}</span>
+        <span class="progress-count">${total} / ${GOAL}건 &nbsp;<span style="color:${needColor}">${needText}</span></span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar ${barClass}" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+function refreshRow(pi) {
+  const row = document.getElementById('tbody').children[pi];
+  if (!row) return;
+  const total = getTotal(people[pi].vals);
+  row.querySelector('.total-cell').textContent = total;
+  row.querySelector('.status-cell').innerHTML = getStatus(total);
+  updateMetrics();
+  renderProgress();
+}
+function handleChange(input) {
+  const pi = parseInt(input.dataset.pi);
+  const ci = parseInt(input.dataset.ci);
+  const num = parseFloat(input.value.trim());
+  people[pi].vals[ci] = isNaN(num) ? '' : String(num);
+  input.value = people[pi].vals[ci];
+  refreshRow(pi);
+}
+function handleKey(e, pi, ci) {
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault();
+    const inputs = Array.from(document.querySelectorAll('.cell-input'));
+    const idx = inputs.indexOf(e.target);
+    const next = e.key === 'Tab'
+      ? (e.shiftKey ? inputs[idx-1] : inputs[idx+1])
+      : inputs[idx+COL_COUNT] || inputs[idx+1];
+    if (next) { next.focus(); next.select(); }
+  }
+}
+function buildRow(p, pi) {
+  const tr = document.createElement('tr');
+  let html = `<td>${p.name}</td>`;
+  p.vals.forEach((v, ci) => {
+    const cls = WEEKEND_IDX.includes(ci) ? ' class="weekend-col"' : (HIGHLIGHT_IDX.includes(ci) ? ' class="col-highlight"' : '');
+    html += `<td${cls}><input class="cell-input" type="text" inputmode="decimal" value="${v}"
+      data-pi="${pi}" data-ci="${ci}"
+      onchange="handleChange(this)"
+      onkeydown="handleKey(event,${pi},${ci})"></td>`;
+  });
+  const total = getTotal(p.vals);
+  html += `<td class="total-cell">${total}</td><td class="status-cell">${getStatus(total)}</td>`;
+  tr.innerHTML = html;
+  return tr;
+}
+function render() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  people.forEach((p, pi) => tbody.appendChild(buildRow(p, pi)));
+  updateMetrics();
+  renderProgress();
+}
+function addPerson() {
+  const inp = document.getElementById('new-name');
+  const name = inp.value.trim();
+  if (!name) return;
+  people.push({ name, vals: Array(COL_COUNT).fill('') });
+  inp.value = '';
+  render();
+}
+render();
+</script>
+</body>
+</html>
