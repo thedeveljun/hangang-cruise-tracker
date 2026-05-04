@@ -13,104 +13,65 @@
       --pass-bg: #e8f5ee; --fail-bg: #fdf0ee;
       --radius-md: 8px; --radius-lg: 12px;
     }
-    body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f0f4f8; padding: 1rem; }
+    body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f0f4f8; padding: 0.5rem; }
     .app { max-width: 960px; margin: 0 auto; padding: 0 0 2rem; }
-
-    /* 헤더 */
     .header {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      padding: 1.25rem 1.5rem; color: white;
-      border-radius: var(--radius-lg); margin-bottom: 1rem;
+      padding: 0.7rem 1rem; color: white;
+      border-radius: var(--radius-lg); margin-bottom: 0.5rem;
     }
-    .header h1 { font-size: 17px; font-weight: 500; margin-top: 8px; color: white; }
-    .header .sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+    .header h1 { font-size: 15px; font-weight: 500; margin-top: 4px; color: white; }
+    .header .sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
     .event-date {
       display: inline-flex; align-items: center;
       background: var(--amber); color: white; font-size: 12px; font-weight: 500;
       padding: 3px 12px; border-radius: 20px;
     }
-
-    /* 저장 상태 */
-    .save-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--radius-md); padding: 8px 14px;
-      margin-bottom: 1rem; font-size: 12px;
-    }
-    .save-status { color: var(--muted); }
-    .save-status.saved { color: var(--green); }
-    .btn-reset {
-      font-size: 11px; color: var(--red); background: none;
-      border: 1px solid var(--red); border-radius: 6px;
-      padding: 3px 10px; cursor: pointer;
-    }
-    .btn-reset:hover { background: var(--fail-bg); }
-
-    /* 지표 */
-    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 0.5rem; }
     .metric-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius-md); padding: 12px 14px;
+      border-radius: var(--radius-md); padding: 6px 10px;
     }
-    .metric-card .label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .metric-card .value { font-size: 22px; font-weight: 500; }
+    .metric-card .label { font-size: 10px; color: var(--muted); margin-bottom: 1px; }
+    .metric-card .value { font-size: 18px; font-weight: 500; }
     .value.amber { color: var(--amber); }
     .value.navy { color: var(--navy); }
     .value.green { color: var(--green); }
-
-    /* 환산 규칙 */
     .rule-box {
       background: #fff8ea; border: 1px solid #f5d580;
-      border-radius: var(--radius-md); padding: 10px 14px;
-      margin-bottom: 1rem; font-size: 12px; color: #7a5700;
-      display: flex; gap: 12px; flex-wrap: wrap;
+      border-radius: var(--radius-md); padding: 5px 10px;
+      margin-bottom: 0.5rem; font-size: 11px; color: #7a5700;
+      display: flex; gap: 8px; flex-wrap: wrap;
     }
     .rule-item { display: flex; align-items: center; gap: 5px; }
     .rule-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
-
-    /* 섹션 타이틀 */
     .section-title {
-      font-size: 13px; font-weight: 500; color: var(--navy);
-      margin: 0 0 8px; border-left: 3px solid var(--amber); padding-left: 8px;
+      font-size: 12px; font-weight: 500; color: var(--navy);
+      margin: 0 0 4px; border-left: 3px solid var(--amber); padding-left: 6px;
     }
-
-    /* 테이블 */
     .table-wrap {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem;
+      border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 0.5rem;
     }
     .table-scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     thead { background: var(--navy); color: white; }
-    thead th {
-      padding: 8px 4px; font-weight: 500; font-size: 11px;
-      text-align: center; white-space: nowrap;
-    }
-    thead th:first-child { text-align: left; padding-left: 12px; min-width: 72px; }
+    thead th { padding: 5px 3px; font-weight: 500; font-size: 10px; text-align: center; white-space: nowrap; }
+    thead th:first-child { text-align: left; padding-left: 8px; min-width: 60px; }
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #f5f8ff; }
-    td { padding: 5px 4px; text-align: center; color: var(--text); }
-    td:first-child { text-align: left; padding-left: 12px; font-weight: 500; font-size: 12px; white-space: nowrap; }
-
-    /* ★ 입력 박스 — 테두리 뚜렷하게 */
+    td { padding: 2px 3px; text-align: center; color: var(--text); }
+    td:first-child { text-align: left; padding-left: 8px; font-weight: 500; font-size: 11px; white-space: nowrap; }
     .cell-input {
-      width: 40px; height: 30px; text-align: center;
-      border: 2px solid #a0b0cc;
-      border-radius: 5px;
-      font-size: 13px; background: #f8faff; color: var(--text);
+      width: 34px; height: 24px; text-align: center;
+      border: 2px solid #a0b0cc; border-radius: 4px;
+      font-size: 12px; background: #f8faff; color: var(--text);
       padding: 0; outline: none;
       transition: border-color 0.15s, background 0.15s;
     }
-    .cell-input:focus {
-      border-color: var(--navy);
-      background: #e8eeff;
-    }
-    .cell-input:not(:placeholder-shown) {
-      background: white;
-      border-color: var(--navy-light);
-    }
-
+    .cell-input:focus { border-color: var(--navy); background: #e8eeff; }
+    .cell-input:not(:placeholder-shown) { background: white; border-color: var(--navy-light); }
     .total-cell { font-weight: 500; color: var(--navy); font-size: 13px; }
     .status-badge {
       display: inline-flex; align-items: center;
@@ -121,66 +82,44 @@
     .badge-almost { background: #fff3e0; color: #e67e22; }
     .weekend-col { background: rgba(26,53,96,0.04); }
     .col-highlight { background: rgba(213,135,15,0.08); }
-
-    /* 인원 추가 */
     .add-row {
-      display: flex; gap: 8px; padding: 10px 14px;
+      display: flex; gap: 6px; padding: 6px 10px;
       border-top: 1px solid var(--border); background: #fafbff;
     }
     .add-row input[type=text] {
-      flex: 1; height: 34px; padding: 0 10px;
+      flex: 1; height: 28px; padding: 0 8px;
       border: 2px solid #a0b0cc; border-radius: 6px;
-      font-size: 12px; color: var(--text); background: white;
-      outline: none;
+      font-size: 11px; color: var(--text); background: white; outline: none;
     }
     .add-row input[type=text]:focus { border-color: var(--navy); }
     .btn-add {
-      height: 34px; padding: 0 14px; background: var(--navy);
-      color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;
+      height: 28px; padding: 0 10px; background: var(--navy);
+      color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer;
     }
     .btn-add:hover { background: var(--navy-light); }
-
-    /* 진행률 */
-    .progress-section { margin-bottom: 1rem; }
-    .person-progress { margin-bottom: 10px; }
-    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .progress-name { font-size: 13px; font-weight: 500; color: var(--text); }
-    .progress-count { font-size: 12px; color: var(--muted); }
-    .progress-bar-wrap { height: 8px; background: #e8ecf5; border-radius: 8px; overflow: hidden; }
+    .progress-section { margin-bottom: 0.5rem; }
+    .person-progress { margin-bottom: 5px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+    .progress-name { font-size: 12px; font-weight: 500; color: var(--text); }
+    .progress-count { font-size: 11px; color: var(--muted); }
+    .progress-bar-wrap { height: 6px; background: #e8ecf5; border-radius: 8px; overflow: hidden; }
     .progress-bar { height: 100%; border-radius: 8px; transition: width 0.3s; }
     .bar-pass { background: var(--green); }
     .bar-almost { background: #f39c12; }
     .bar-fail { background: #c0392b; }
-
     .footer-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 0.5rem; }
   </style>
 </head>
 <body>
 <div class="app">
-
   <div class="header">
     <div class="event-date">승선일: 5월 28일(목) 6시</div>
     <h1>서울남동총국 "우수코디 30인" 한강 크루즈 초대</h1>
     <div class="sub">기간: 4/29(수) ~ 5/15(금) &nbsp;|&nbsp; 신규 환산 12건 이상 선착순 30명</div>
   </div>
 
-  <div class="save-bar">
-    <span class="save-status" id="save-status">자동 저장됨</span>
-    <button class="btn-reset" onclick="resetData()">초기화</button>
-  </div>
 
-  <div class="metrics">
-    <div class="metric-card"><div class="label">목표 달성자</div><div class="value green" id="m-pass">0</div></div>
-    <div class="metric-card"><div class="label">전체 참여자</div><div class="value navy" id="m-total">8</div></div>
-    <div class="metric-card"><div class="label">잔여 선착순</div><div class="value amber" id="m-remain">30</div></div>
-  </div>
 
-  <div class="rule-box">
-    <div class="rule-item"><div class="rule-dot"></div>테라솔 U.P / 에어컨: <b style="margin-left:3px">2건</b> 인정</div>
-    <div class="rule-item"><div class="rule-dot"></div>안마의자: <b style="margin-left:3px">2건</b> 인정</div>
-    <div class="rule-item"><div class="rule-dot"></div>침대: <b style="margin-left:3px">1.5건</b> 인정</div>
-    <div class="rule-item"><div class="rule-dot"></div>목표: <b style="margin-left:3px">12건 이상</b></div>
-  </div>
 
   <div class="section-title">일별 판매 실적 입력</div>
   <div class="table-wrap">
@@ -207,6 +146,19 @@
 
   <div class="section-title">목표 달성 현황</div>
   <div class="progress-section" id="progress-section"></div>
+  <div class="metrics">
+    <div class="metric-card"><div class="label">목표 달성자</div><div class="value green" id="m-pass">0</div></div>
+    <div class="metric-card"><div class="label">전체 참여자</div><div class="value navy" id="m-total">8</div></div>
+    <div class="metric-card"><div class="label">잔여 선착순</div><div class="value amber" id="m-remain">30</div></div>
+  </div>
+
+  <div class="rule-box">
+    <div class="rule-item"><div class="rule-dot"></div>테라솔 U.P / 에어컨: <b style="margin-left:3px">2건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>안마의자: <b style="margin-left:3px">2건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>침대: <b style="margin-left:3px">1.5건</b> 인정</div>
+    <div class="rule-item"><div class="rule-dot"></div>목표: <b style="margin-left:3px">12건 이상</b></div>
+  </div>
+
   <div class="footer-note">셀에 환산 건수를 직접 입력하세요 (예: 1, 2, 1.5) — Enter: 아래 이동 / Tab: 옆으로 이동</div>
 </div>
 
@@ -229,7 +181,6 @@ const DEFAULT_PEOPLE = [
 ];
 
 let people = loadData();
-let saveTimer = null;
 
 function loadData() {
   try {
@@ -240,24 +191,7 @@ function loadData() {
 }
 
 function saveData() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(people));
-    const el = document.getElementById('save-status');
-    el.textContent = '저장됨 ✓';
-    el.className = 'save-status saved';
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      el.textContent = '자동 저장됨';
-      el.className = 'save-status';
-    }, 2000);
-  } catch(e) {}
-}
-
-function resetData() {
-  if (!confirm('모든 데이터를 초기화할까요?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  people = DEFAULT_PEOPLE.map(p => ({ name: p.name, vals: [...p.vals] }));
-  render();
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(people)); } catch(e) {}
 }
 
 function getTotal(vals) {
