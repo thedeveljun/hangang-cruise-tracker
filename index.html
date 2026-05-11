@@ -146,12 +146,6 @@
 
   <div class="section-title">목표 달성 현황</div>
   <div class="progress-section" id="progress-section"></div>
-  <div class="metrics">
-    <div class="metric-card"><div class="label">목표 달성자</div><div class="value green" id="m-pass">0</div></div>
-    <div class="metric-card"><div class="label">전체 참여자</div><div class="value navy" id="m-total">8</div></div>
-    <div class="metric-card"><div class="label">잔여 선착순</div><div class="value amber" id="m-remain">30</div></div>
-  </div>
-
   <div class="rule-box">
     <div class="rule-item"><div class="rule-dot"></div>테라솔 U.P / 에어컨: <b style="margin-left:3px">2건</b> 인정</div>
     <div class="rule-item"><div class="rule-dot"></div>안마의자: <b style="margin-left:3px">2건</b> 인정</div>
@@ -204,13 +198,6 @@ function getStatus(total) {
   return '<span class="status-badge badge-fail">미달</span>';
 }
 
-function updateMetrics() {
-  const passed = people.filter(p => getTotal(p.vals) >= GOAL).length;
-  document.getElementById('m-pass').textContent = passed;
-  document.getElementById('m-total').textContent = people.length;
-  document.getElementById('m-remain').textContent = Math.max(0, 30 - passed);
-}
-
 function renderProgress() {
   document.getElementById('progress-section').innerHTML = people.map(p => {
     const total = getTotal(p.vals);
@@ -234,7 +221,6 @@ function refreshRow(pi) {
   const total = getTotal(people[pi].vals);
   row.querySelector('.total-cell').textContent = total;
   row.querySelector('.status-cell').innerHTML = getStatus(total);
-  updateMetrics();
   renderProgress();
   saveData();
 }
@@ -281,7 +267,6 @@ function render() {
   const tbody = document.getElementById('tbody');
   tbody.innerHTML = '';
   people.forEach((p, pi) => tbody.appendChild(buildRow(p, pi)));
-  updateMetrics();
   renderProgress();
 }
 
